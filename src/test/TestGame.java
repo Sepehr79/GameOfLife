@@ -39,4 +39,17 @@ public class TestGame {
         System.out.println(copied);
     }
 
+    @Test
+    public void testExecute() throws InterruptedException {
+
+        GameLife game = new GameLife(15);
+        game.setRandomPosition(.1);
+
+        Thread thread = new Thread(game);
+
+        thread.start();
+
+        thread.join();
+    }
+
 }

@@ -2,12 +2,10 @@ package com.game;
 
 import java.util.Random;
 
-public class GameLife implements Cloneable{
+public class GameLife implements Cloneable, Runnable{
 
     private final int size;
-
     private boolean[][] index;
-
 
     public GameLife(int size){
         this.size = size;
@@ -18,7 +16,6 @@ public class GameLife implements Cloneable{
         this(gameLife.size);
         for (int i = 0 ; i < gameLife.size; i++)
             this.index[i] = gameLife.getIndex()[i].clone();
-
     }
 
     public boolean[][] getIndex(){
@@ -44,26 +41,23 @@ public class GameLife implements Cloneable{
 
             for(int i = 0; i< size ; i++){
                 for(int j = 0; j < size ; j++){
-
                     if(random.nextDouble() < posib){
                         index[i][j] = true;
                     }
-
                 }
             }
-
         }else{
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Input should between 0 and 1");
         }
-
-    }// End of method
+    }
 
     /**
-     * go to next position
+     * Go to the next position
      */
     public void next(){
-        boolean[][] newIndex = new boolean[size][size];
 
+        // Make a new arr to copy the result
+        boolean[][] newIndex = new boolean[size][size];
 
         for(int i = 0; i< size ; i++){
             for(int j = 0; j < size ; j++){
@@ -114,9 +108,6 @@ public class GameLife implements Cloneable{
             }
             out.append("\n");
         }
-
-
-
         return out.toString();
     }
 
@@ -125,27 +116,16 @@ public class GameLife implements Cloneable{
         return new GameLife(this);
     }
 
-    public static void main(String[] args) {
-
-        GameLife game = new GameLife(15);
-        game.setRandomPosition(.4);
-
-        new Thread(() -> {
-
-            while(true){
-
-                System.out.println(game);
-
-                try{
-                    Thread.currentThread().sleep(1000);
-                }catch(InterruptedException ex){
-                    ex.printStackTrace();
-                }
-                game.next();
-
+    @Override
+    public void run() {
+        while(true){
+            System.out.println(this);
+            try{
+                Thread.currentThread().sleep(1000);
+            }catch(InterruptedException ex){
+                ex.printStackTrace();
             }
-        }).start();
-
+            this.next();
+        }
     }
-
 }
