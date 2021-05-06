@@ -2,7 +2,7 @@ package com.game;
 
 import java.util.Random;
 
-public class GameLife{
+public class GameLife implements Cloneable{
 
     private final int size;
 
@@ -12,6 +12,13 @@ public class GameLife{
     public GameLife(int size){
         this.size = size;
         index = new boolean[size][size];
+    }
+
+    private GameLife(GameLife gameLife){
+        this(gameLife.size);
+        for (int i = 0 ; i < gameLife.size; i++)
+            this.index[i] = gameLife.getIndex()[i].clone();
+
     }
 
     public boolean[][] getIndex(){
@@ -34,6 +41,7 @@ public class GameLife{
     public void setRandomPosition(double posib){
         if(posib < 1 && posib > 0){
             Random random = new Random();
+
             for(int i = 0; i< size ; i++){
                 for(int j = 0; j < size ; j++){
 
@@ -112,6 +120,11 @@ public class GameLife{
         return out.toString();
     }
 
+    @Override
+    public Cloneable clone(){
+        return new GameLife(this);
+    }
+
     public static void main(String[] args) {
 
         GameLife game = new GameLife(15);
@@ -131,7 +144,6 @@ public class GameLife{
                 game.next();
 
             }
-
         }).start();
 
     }
